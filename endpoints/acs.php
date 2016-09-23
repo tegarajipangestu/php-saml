@@ -11,7 +11,9 @@ require_once dirname(dirname(__FILE__)).'/_toolkit_loader.php';
 $auth = new OneLogin_Saml2_Auth();
 
 $auth->processResponse();
+
 $errors = $auth->getErrors();
+
 if (!empty($errors)) {
     print_r('<p>'.implode(', ', $errors).'</p>');
     exit();
@@ -22,12 +24,12 @@ if (!$auth->isAuthenticated()) {
     exit();
 }
 
+$_SESSION['samlUserdata'] = $auth->getAttributes();
+$_SESSION['IdPSessionIndex'] = $auth->getSessionIndex();
 if (isset($_POST['RelayState']) && OneLogin_Saml2_Utils::getSelfURL() != $_POST['RelayState']) {
     $auth->redirectTo($_POST['RelayState']);
 }
 
-$_SESSION['samlUserdata'] = $auth->getAttributes();
-$_SESSION['IdPSessionIndex'] = $auth->getSessionIndex();
 $attributes = $_SESSION['samlUserdata'];
 
 if (!empty($attributes)) {

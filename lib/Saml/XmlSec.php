@@ -66,7 +66,6 @@ class OneLogin_Saml_XmlSec
 
     /**
      * @return bool
-     *
      * @throws Exception
      */
     public function isValid()
@@ -96,8 +95,9 @@ class OneLogin_Saml_XmlSec
         }
 
         try {
-            $objXMLSecDSig->validateReference();
-        } catch (Exception $e) {
+            $retVal = $objXMLSecDSig->validateReference();
+        }
+        catch (Exception $e) {
             throw new Exception('Reference Validation Failed');
         }
 

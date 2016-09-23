@@ -108,10 +108,10 @@ class OneLogin_Saml2_Auth
     {
         $this->_errors = array();
         if (isset($_POST) && isset($_POST['SAMLResponse'])) {
-            // AuthnResponse -- HTTP_POST invalid_binding
+            // AuthnResponse -- HTTP_POST Binding
             $response = new OneLogin_Saml2_Response($this->_settings, $_POST['SAMLResponse']);
+
             if ($response->isValid($requestId)) {
-                // dd($response);
                 $this->_attributes = $response->getAttributes();
                 $this->_nameid = $response->getNameId();
                 $this->_authenticated = true;
@@ -159,8 +159,8 @@ class OneLogin_Saml2_Auth
                     }
                 }
             }
-        } else if (isset($_POST) && isset($_POST['SAMLRequest'])) {
-            $logoutRequest = new OneLogin_Saml2_LogoutRequest($this->_settings, $_POST['SAMLRequest']);
+        } else if (isset($_GET) && isset($_GET['SAMLRequest'])) {
+            $logoutRequest = new OneLogin_Saml2_LogoutRequest($this->_settings, $_GET['SAMLRequest']);
             if (!$logoutRequest->isValid($retrieveParametersFromServer)) {
                 $this->_errors[] = 'invalid_logout_request';
                 $this->_errorReason = $logoutRequest->getError();
@@ -178,10 +178,8 @@ class OneLogin_Saml2_Auth
                 $logoutResponse = $responseBuilder->getResponse();
 
                 $parameters = array('SAMLResponse' => $logoutResponse);
-                $relayState = $_POST['RelayState'];
-                preg_replace('/(.*?):\\\\(.*?)\\logout/i', '/$1:\\$2\\/i', $relayState);
-                if (isset($_POST['RelayState'])) {
-                    $parameters['RelayState'] = $relayState;
+                if (isset($_GET['RelayState'])) {
+                    $parameters['RelayState'] = $_GET['RelayState'];
                 }
 
                 $security = $this->_settings->getSecurityData();
@@ -190,11 +188,9 @@ class OneLogin_Saml2_Auth
                     $parameters['SigAlg'] = $security['signatureAlgorithm'];
                     $parameters['Signature'] = $signature;
                 }
-
                 return $this->redirectTo($this->getSLOurl(), $parameters);
             }
         } else {
-            dd($_POST);
             $this->_errors[] = 'invalid_binding';
             throw new OneLogin_Saml2_Error(
                 'SAML LogoutRequest/LogoutResponse not found. Only supported HTTP_REDIRECT Binding',
@@ -218,6 +214,7 @@ class OneLogin_Saml2_Auth
         if (empty($url) && isset($_REQUEST['RelayState'])) {
             $url = $_REQUEST['RelayState'];
         }
+
         return OneLogin_Saml2_Utils::redirect($url, $parameters);
     }
 
@@ -366,8 +363,6 @@ class OneLogin_Saml2_Auth
             $nameId = $this->_nameid;
         }
 
-        $sessionIndex = Auth::user()->session_index;
-        // dd($sessionIndex);
         $logoutRequest = new OneLogin_Saml2_LogoutRequest($this->_settings, null, $nameId, $sessionIndex);
 
         $samlRequest = $logoutRequest->getRequest();
@@ -378,13 +373,14 @@ class OneLogin_Saml2_Auth
         } else {
             $parameters['RelayState'] = OneLogin_Saml2_Utils::getSelfRoutedURLNoQuery();
         }
+
         $security = $this->_settings->getSecurityData();
         if (isset($security['logoutRequestSigned']) && $security['logoutRequestSigned']) {
             $signature = $this->buildRequestSignature($samlRequest, $parameters['RelayState'], $security['signatureAlgorithm']);
             $parameters['SigAlg'] = $security['signatureAlgorithm'];
             $parameters['Signature'] = $signature;
         }
-        
+
         return $this->redirectTo($sloUrl, $parameters);
     }
 

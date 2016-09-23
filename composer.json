@@ -1,8 +1,8 @@
 {
-    "name": "tegarajipangestu/php-saml",
+    "name": "onelogin/php-saml",
     "description": "OneLogin PHP SAML Toolkit",
     "license": "MIT",
-    "version": "2.8.0",
+    "version": "2.6.1",
     "homepage": "https://onelogin.zendesk.com/hc/en-us/sections/200245634-SAML-Toolkits",
     "keywords": ["saml", "saml2", "onelogin"],
     "autoload": {
@@ -14,8 +14,8 @@
     },
     "support": {
         "email": "sixto.garcia@onelogin.com",
-        "issues": "https://github.com/tegarajipangestu/php-saml/issues",
-        "source": "https://github.com/tegarajipangestu/php-saml/"
+        "issues": "https://github.com/onelogin/php-saml/issues",
+        "source": "https://github.com/onelogin/php-saml/"
     },
     "require": {
         "php": ">=5.3.2",
@@ -25,7 +25,7 @@
     },
     "require-dev": {
 	"phpunit/phpunit": "3.7.31",
-        "satooshi/php-coveralls": "1.0.1",
+        "satooshi/php-coveralls": "dev-master",
         "sebastian/phpcpd": "*",
         "phploc/phploc": "*",
         "pdepend/pdepend" : "1.1.0",

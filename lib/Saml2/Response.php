@@ -186,14 +186,6 @@ class OneLogin_Saml2_Response
                     throw new Exception("$spEntityId is not a valid audience for this Response");
                 }
 
-                // Check the issuers
-                $issuers = $this->getIssuers();
-                foreach ($issuers as $issuer) {
-                    if (empty($issuer) || $issuer != $idPEntityId) {
-                        throw new Exception("Invalid issuer in the Assertion/Response");
-                    }
-                }
-
                 // Check the session Expiration
                 $sessionExpiration = $this->getSessionNotOnOrAfter();
                 if (!empty($sessionExpiration) &&  $sessionExpiration <= time()) {
@@ -271,6 +263,7 @@ class OneLogin_Saml2_Response
                         }
                     }
                 }
+
                 if (!OneLogin_Saml2_Utils::validateSign($documentToValidate, $cert, $fingerprint, $fingerprintalg)) {
                     throw new Exception('Signature validation failed. SAML Response rejected');
                 }

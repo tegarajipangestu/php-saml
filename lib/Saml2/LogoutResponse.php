@@ -87,12 +87,10 @@ class OneLogin_Saml2_LogoutResponse
     /**
      * Determines if the SAML LogoutResponse is valid
      *
-     * @param string|null $requestId The ID of the LogoutRequest sent by this SP to the IdP
-     * @param bool $retrieveParametersFromServer
-     *
-     * @return bool Returns if the SAML LogoutResponse is or not valid
+     * @param string $requestId The ID of the LogoutRequest sent by this SP to the IdP
      *
      * @throws Exception
+     * @return bool Returns if the SAML LogoutResponse is or not valid
      */
     public function isValid($requestId = null, $retrieveParametersFromServer=false)
     {
@@ -118,12 +116,6 @@ class OneLogin_Saml2_LogoutResponse
                     if ($requestId != $inResponseTo) {
                         throw new Exception("The InResponseTo of the Logout Response: $inResponseTo, does not match the ID of the Logout request sent by the SP: $requestId");
                     }
-                }
-
-                // Check issuer
-                $issuer = $this->getIssuer();
-                if (!empty($issuer) && $issuer != $idPEntityId) {
-                    throw new Exception("Invalid issuer in the Logout Response");
                 }
 
                 $currentURL = OneLogin_Saml2_Utils::getSelfRoutedURLNoQuery();

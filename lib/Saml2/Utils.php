@@ -187,8 +187,6 @@ class OneLogin_Saml2_Utils
      */
     public static function redirect($url, $parameters = array(), $stay = false)
     {
-        Debugbar::info($url);
-        Debugbar::info($url);
         assert('is_string($url)');
         assert('is_array($parameters)');
 
@@ -233,9 +231,11 @@ class OneLogin_Saml2_Utils
                 $paramPrefix = '&';
             }
         }
+
         if ($stay) {
             return $url;
         }
+
         header('Pragma: no-cache');
         header('Cache-Control: no-cache, must-revalidate');
         header('Location: ' . $url);

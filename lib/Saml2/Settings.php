@@ -19,14 +19,14 @@ class OneLogin_Saml2_Settings
      * if it expects them signed or encrypted. If not, the messages will be accepted
      * and some security issues will be also relaxed.
      *
-     * @var bool
+     * @var boolean
      */
     private $_strict = false;
 
     /**
      * Activate debug mode
      *
-     * @var bool
+     * @var boolean
      */
     private $_debug = false;
 
@@ -84,9 +84,9 @@ class OneLogin_Saml2_Settings
      * - Sets the paths of the different folders
      * - Loads settings info from settings file or array/object provided
      *
-     * @param array|object|null $settings SAML Toolkit Settings
-     *
-     * @throws OneLogin_Saml2_Error If any settings parameter is invalid
+     * @param array|object $settings SAML Toolkit Settings
+     * 
+     * @exceptions Throws error exception if any settings parameter is invalid
      */
     public function __construct($settings = null, $spValidationOnly = false)
     {
@@ -210,7 +210,7 @@ class OneLogin_Saml2_Settings
      *
      * @param array $settings SAML Toolkit Settings
      * 
-     * @return bool True if the settings info is valid
+     * @return boolean  True if the settings info is valid
      */
     private function _loadSettingsFromArray($settings)
     {
@@ -255,8 +255,7 @@ class OneLogin_Saml2_Settings
     /**
      * Loads settings info from the settings file
      *
-     * @return bool True if the settings info is valid
-     * @throws OneLogin_Saml2_Error
+     * @return boolean  True if the settings info is valid
      */
     private function _loadSettingsFromFile()
     {
@@ -328,11 +327,6 @@ class OneLogin_Saml2_Settings
         }
         if (!isset($this->_security['wantAssertionsSigned'])) {
             $this->_security['wantAssertionsSigned'] = false;
-        }
-
-        // NameID element expected
-        if (!isset($this->_security['wantNameId'])) {
-            $this->_security['wantNameId'] = true;
         }
 
         // encrypt expected
@@ -565,7 +559,7 @@ class OneLogin_Saml2_Settings
     /**
      * Checks if the x509 certs of the SP exists and are valid.
      *
-     * @return bool
+     * @return boolean
      */
     public function checkSPCerts()
     {
@@ -669,8 +663,6 @@ class OneLogin_Saml2_Settings
      * Gets the SP metadata. The XML representation.
      *
      * @return string  SP metadata (xml)
-     * @throws Exception
-     * @throws OneLogin_Saml2_Error
      */
     public function getSPMetadata()
     {
@@ -679,11 +671,7 @@ class OneLogin_Saml2_Settings
         $cert = $this->getSPcert();
 
         if (!empty($cert)) {
-            $metadata = OneLogin_Saml2_Metadata::addX509KeyDescriptors(
-                $metadata,
-                $cert,
-                $this->_security['wantNameIdEncrypted'] || $this->_security['wantAssertionsEncrypted']
-            );
+            $metadata = OneLogin_Saml2_Metadata::addX509KeyDescriptors($metadata, $cert);
         }
 
         //Sign Metadata
@@ -740,8 +728,7 @@ class OneLogin_Saml2_Settings
                 $certMetadata = file_get_contents($certMetadataFile);
             }
 
-            $signatureAlgorithm = $this->_security['signatureAlgorithm'];
-            $metadata = OneLogin_Saml2_Metadata::signMetadata($metadata, $keyMetadata, $certMetadata, $signatureAlgorithm);
+            $metadata = OneLogin_Saml2_Metadata::signMetadata($metadata, $keyMetadata, $certMetadata);
         }
         return $metadata;
     }
@@ -831,7 +818,7 @@ class OneLogin_Saml2_Settings
     /**
      * Activates or deactivates the strict mode.
      *
-     * @param bool $value Strict parameter
+     * @param boolean $value Strict parameter
      */
     public function setStrict($value)
     {
@@ -843,7 +830,7 @@ class OneLogin_Saml2_Settings
     /**
      * Returns if the 'strict' mode is active.
      *
-     * @return bool Strict parameter
+     * @return boolean Strict parameter
      */
     public function isStrict()
     {
@@ -853,7 +840,7 @@ class OneLogin_Saml2_Settings
     /**
      * Returns if the debug is active.
      *
-     * @return bool Debug parameter
+     * @return boolean Debug parameter
      */
     public function isDebugActive()
     {

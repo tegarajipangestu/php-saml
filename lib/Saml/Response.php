@@ -7,8 +7,8 @@ class OneLogin_Saml_Response extends OneLogin_Saml2_Response
      * Internally initializes an SP SAML instance
      * and an OneLogin_Saml2_Response.
      *
-     * @param array|object $oldSettings Settings
-     * @param string       $assertion  SAML Response
+     * @param OneLogin_Saml_Settings $oldSettings Settings
+     * @param string                 $$assertion  SAML Response
      */
     public function __construct($oldSettings, $assertion)
     {
@@ -18,20 +18,16 @@ class OneLogin_Saml_Response extends OneLogin_Saml2_Response
     }
 
     /**
-     * Retrieves an Array with the logged user data.
-     *
-     * @return array
-     */
+    * Retrieves an Array with the logged user data.
+    */
     public function get_saml_attributes()
     {
         return $this->getAttributes();
     }
 
     /**
-     * Retrieves the nameId
-     *
-     * @return string
-     */
+    * Retrieves the nameId
+    */
     public function get_nameid()
     {
         return $this->getNameId();
